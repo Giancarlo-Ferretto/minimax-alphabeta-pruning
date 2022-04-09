@@ -9,6 +9,9 @@ class State():
         self.moves_count = moves_count
         self.visited = False
         self.value = 0
+        self.alpha = 0
+        self.beta = 0
+        self.parent = None
         self.children= []
 
     def get_actions(self):
@@ -56,6 +59,67 @@ class Action():
     def __str__(self):
         return "[" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + "]"
 
+def alpha_beta_pruning(state):
+    state = deepcopy(state)
+    state.parent=None
+
+    current_player = state.next_player
+    stack = [state]
+    
+    iter_counter = 0
+    while len(stack) > 0:
+        s = stack[-1] # no se elimina del stack
+
+        if s.visited == False: # primera visita
+            s.visited = True
+
+            #descarte de rama
+            if s.parent is not None and s.parent.parent is not None:
+                if current_player == s.next_player and s.parent.beta <= s.parent.parent.alpha: continue
+                if current_player != s.next_player and s.parent.alpha >= s.parent.parent.beta: continue
+
+            if s.get_winner() is not None: continue # final state
+
+            iter_counter+=1
+
+            actions = s.get_actions()
+
+            for a in actions:
+                child = copy(s) # no copia los hijos del nodo (copia valores de alpha y beta)
+                child.alpha=s.alpha; child.beta=s.beta
+                child.parent=s
+
+                child.transition(a)
+                stack.append(child)
+
+                # se agrega el hijo a s
+                s.children.append(child)
+
+        else: # en la segunda visita calculamos el valor
+            if len(s.children) == 0: #final state
+            #en caso de ser estado final asignamos 
+            #1 si gana el current_player, -1 si pierde y 0 si empatan
+                winner = s.get_winner()
+                s.value=0
+                if current_player == winner:
+                    s.value=1
+                elif winner is not None:
+                    s.value=-1
+
+            else: #not final state
+                # el valor se obtiene de los estados hijos
+                if current_player == s.next_player:
+                    s.value = max([ss.value for ss in s.children])
+                else:
+                    s.value = min([ss.value for ss in s.children])
+
+            if current_player == s.next_player:
+                if s.parent is not None and s.value < s.parent.beta: s.parent.beta=s.value
+            else:
+                if s.parent is not None and s.value > s.parent.alpha: s.parent.alpha=s.value
+            stack.pop()
+    #retorna la lista de acciones con sus valores asociados
+    return [[ss.last_action, ss.value] for ss in state.children], iter_counter
 
 # matriz[x][y][z]
 # x plano
@@ -84,11 +148,21 @@ state.transition(Action(1, 1, 0))
 state.transition(Action(0, 2, 0))
 state.transition(Action(2, 2, 0))
 state.transition(Action(0, 3, 0))
-state.transition(Action(3, 3, 0))
+#state.transition(Action(3, 3, 0))
 
-winner = state.get_winner()
+print("TABLERO:", state.matrix)
 
-if winner != None:
-    print("\nthe winner is", winner, "in", state.last_action)
-else: 
-    print("\nthe game is not over")
+#winner = state.get_winner()
+
+#if winner != None:
+#    print("\nthe winner is", winner, "in", state.last_action)
+#else: 
+#    print("\nthe game is not over")
+
+actions, iters = alpha_beta_pruning(state)
+
+print("JUGADOR ACTUAL:", state.next_player)
+print("ITERACIONES REALIZADAS:", iters)
+
+for action in actions:
+    print(action[0], action[1])
