@@ -1,4 +1,4 @@
-from copy import deepcopy
+from copy import copy, deepcopy
 
 class State():
     def __init__(self, matrix, next_player = 'X', moves_count = 0, last_player = None, last_action = None):
@@ -7,6 +7,9 @@ class State():
         self.last_player = last_player
         self.last_action = last_action
         self.moves_count = moves_count
+        self.visited = False
+        self.value = 0
+        self.children= []
 
     def get_actions(self):
         actions = []
@@ -26,14 +29,6 @@ class State():
         self.moves_count += 1
 
     def get_winner(self):
-        if self.last_action is None: return None
-        last_x = self.last_action.x
-        last_y = self.last_action.y
-        last_z = self.last_action.z
-        print("last action", last_x, last_y, last_z)
-        last_player = self.last_player
-        print("last player", last_player)
-
         for i in range(4):
             for j in range(4):
                 for k in range(4):
@@ -48,6 +43,9 @@ class State():
                                 except:
                                     continue
         return None
+
+    def __copy__(self):
+        return type(self)(self.matrix, self.next_player, self.moves_count, self.last_player, self.last_action)
 
 class Action():
     def __init__(self, x, y, z):
