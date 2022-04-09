@@ -8,9 +8,16 @@ En el tablero 4x4x4 existen 76 combinaciones ganadoras posibles. En cada uno de 
 
 Claramente la estrategia para ganar el Tic-Tac-Toe 3D es demasiado complicada y extensa para ser aplicada por jugadores humanos, pero no imposible.
 
-# Estructuras
+# Modelo
+##State()
 
-# Obtener ganador
+###get_actions()
+
+###transition()
+
+###get_winner()
+
+##Action()
 
 # Algoritmo Minimax
 Resultados obtenidos por medio de la función `minimax(state)`:
