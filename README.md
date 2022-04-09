@@ -36,4 +36,5 @@ ITERACIONES REALIZADAS PARA ENCONTRAR LA ACCIÓN GANADORA DEL JUGADOR 'X': 58
 
 ACCIÓN GANADORA PARA EL JUGADOR 'X': [[3, 3, 0] 1]
 
-[Done] exited with code=0 in 1.159 seconds```
+[Done] exited with code=0 in 1.159 seconds
+```
