@@ -37,7 +37,7 @@ ACCIÓN GANADORA PARA EL JUGADOR 'X': ??? (no hay resultados)
 
 [Done] exited with code=0 in 600.078 seconds
 ```
-No se obtuvieron resultados a partir de la función iterative_minimax en seiscientos segundos. Los logs nos indican que se realizaron más de miles de iteraciones entre diferentes acciones y posibles estados.
+No se obtuvieron resultados a partir de la función iterative_minimax en seiscientos segundos. Los logs nos indican que se realizaron más de miles de iteraciones entre diferentes acciones y estados posibles pero debido al gran tiempo de procesamiento y complejidad del algoritmo al revisar todas las ramas posibles del árbol, este no logra entregar resultados en un tiempo óptimo. Por esto se prefiere acortar ramas e implementar el algoritmo de poda alpha beta, según la evaluación de ramas y nodos.
 
 # Algoritmo Alpha-Beta-Pruning
 Resultados obtenidos por medio de la función `alpha_beta_pruning(state)`:
