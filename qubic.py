@@ -1,4 +1,5 @@
 from copy import copy, deepcopy
+import time
 
 class State():
     def __init__(self, matrix, next_player = 'X', moves_count = 0, last_player = None, last_action = None):
@@ -58,6 +59,58 @@ class Action():
 
     def __str__(self):
         return "[" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + "]"
+
+def iterative_minimax(state):
+    s = deepcopy(state)
+    current_player = state.next_player
+    stack = [s]
+
+    current_time = time.perf_counter()
+
+    iter_counter = 0
+    while len(stack) > 0:
+        s = stack[-1] # no se elimina del stack
+
+        if s.visited == False: # primera visita
+            s.visited = True
+
+            if s.get_winner() is not None: continue # final state
+
+            iter_counter+=1
+            actions = s.get_actions()
+
+            for a in actions:
+                child = copy(s) # no copia los hijos del nodo
+                child.transition(a)
+                stack.append(child)
+
+                # se agrega el hijo a s
+                s.children.append(child)
+
+        else: # en la segunda visita calculamos el valor
+            if len(s.children) == 0: #final state
+                #en caso de ser estado final asignamos 
+                #1 si gana el current_player, -1 si pierde y 0 si empatan
+                winner = s.get_winner()
+                s.value=0
+                if current_player == winner:
+                  s.value=1
+                elif winner is not None:
+                    s.value=-1
+
+            else: #not final state
+                # el valor se obtiene de los estados hijos
+                if current_player == s.next_player:
+                    s.value = max([ss.value for ss in s.children])
+                else:
+                   s.value = min([ss.value for ss in s.children])
+                stack.pop()
+
+        if time.perf_counter() - current_time >= 600:
+            break
+
+    #retorna la lista de acciones con sus valores asociados
+    return [[ss.pos_last_move, ss.value] for ss in state.children], iter_counter
 
 def alpha_beta_pruning(state):
     state = deepcopy(state)
@@ -159,7 +212,7 @@ print("TABLERO:", state.matrix)
 #else: 
 #    print("\nthe game is not over")
 
-actions, iters = alpha_beta_pruning(state)
+actions, iters = iterative_minimax(state)
 
 print("JUGADOR ACTUAL:", state.next_player)
 print("ITERACIONES REALIZADAS:", iters)
