@@ -20,10 +20,25 @@ Claramente la estrategia para ganar el Tic-Tac-Toe 3D es demasiado complicada y 
 ## Action()
 
 # Algoritmo Minimax
-Resultados obtenidos por medio de la función `minimax(state)`:
+Resultados obtenidos por medio de la función `iterative_minimax(state)`:
 ```
-...
+TABLERO: 
+['X', '-', '-', '-'] ['-', '-', '-', '-'] ['-', '-', '-', '-'] ['-', '-', '-', '-']
+['O', '-', '-', '-'] ['X', '-', '-', '-'] ['-', '-', '-', '-'] ['-', '-', '-', '-'] 
+['O', '-', '-', '-'] ['-', '-', '-', '-'] ['X', '-', '-', '-'] ['-', '-', '-', '-'] 
+['O', '-', '-', '-'] ['-', '-', '-', '-'] ['-', '-', '-', '-'] ['-', '-', '-', '-']
+
+SIGUIENTE JUGADOR: X
+
+POSIBLES ACCIONES JUGADOR X: ??? (no hay resultados)
+ITERACIONES REALIZADAS PARA ENCONTRAR LA ACCIÓN GANADORA DEL JUGADOR 'X': 13
+
+ACCIÓN GANADORA PARA EL JUGADOR 'X': ??? (no hay resultados)
+
+[Done] exited with code=0 in 600.078 seconds
 ```
+No se obtuvieron resultados a partir de la función iterative_minimax en seiscientos segundos. Los logs nos indican que se realizaron más de miles de iteraciones entre diferentes acciones y posibles estados.
+
 # Algoritmo Alpha-Beta-Pruning
 Resultados obtenidos por medio de la función `alpha_beta_pruning(state)`:
 ```
